@@ -35,13 +35,8 @@ const Signup = () => {
       const { user } = await createUserWithEmailAndPassword(auth, data.email, data.password);
       await updateProfile(user, { displayName: data.username });
       router.push('/signin');
-    } catch (error) {
-      if (error instanceof Error) {
-        // ✅ TypeScript knows err is Error
-        console.log(error.message);
-      } else {
-        console.log('Unexpected error', error);
-      }
+    } catch (error:any) {
+      setError(error.message);
     }
   };
 
@@ -146,7 +141,6 @@ const Signup = () => {
             </div>
             );
             };
-          
             
             export default Signup;
             

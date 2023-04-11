@@ -22,13 +22,8 @@ const [errorMessage, setErrorMessage] = useState(null as string | null);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/landing');
-    } catch (error) {
-      if (error instanceof Error) {
-        // ✅ TypeScript knows err is Error
-        console.log(error.message);
-      } else {
-        console.log('Unexpected error', error);
-      }
+    } catch (error:any) {
+      setErrorMessage(error.message);
     }
   };
 
