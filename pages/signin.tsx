@@ -29,6 +29,7 @@ const [errorMessage, setErrorMessage] = useState(null as string | null);
       } else {
         console.log('Unexpected error', error);
       }
+    }
   };
 
   return (
@@ -87,5 +88,4 @@ const [errorMessage, setErrorMessage] = useState(null as string | null);
     <Footer/>
     </div>
   );
-}
 }

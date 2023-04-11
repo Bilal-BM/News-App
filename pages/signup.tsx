@@ -42,6 +42,7 @@ const Signup = () => {
       } else {
         console.log('Unexpected error', error);
       }
+    }
   };
 
   return (
@@ -145,7 +146,7 @@ const Signup = () => {
             </div>
             );
             };
-          }
+          
             
             export default Signup;
             
