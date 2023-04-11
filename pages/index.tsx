@@ -23,7 +23,7 @@ const LandingPage = () => {
             Get the latest news from around the world
           </p>
 
-          <div className="grid grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             
               <div className="bg-white rounded-lg overflow-hidden shadow-lg">
                 <Image
