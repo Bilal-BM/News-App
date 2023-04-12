@@ -13,7 +13,7 @@ const Footer = () => {
   return (
     <footer className="bg-slate-800 text-white ">
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-64">
+        <div className="grid grid-cols-1 md:grid-cols-3 ">
           
           {/* About us */}
           <div>
@@ -47,15 +47,15 @@ const Footer = () => {
           
 
           {/* Logo */}
-          {/* <div className="text-center md:text-left"> */}
+          {/* <div  className=""> */}
             <Link legacyBehavior href="/">
               
                 <Image
-                  className="h-24 w-40  "
+                  className="h-20 w-32  "
                   src="/log1.svg"
                   alt="BM News Logo"
-                  width={400}
-                  height={600}
+                  width={0}
+                  height={0}
                   
                 />
             </Link>
@@ -63,7 +63,7 @@ const Footer = () => {
 
 {/* Follow us */}
 <div>
-            <h2 className="text-lg font-medium mb-4">Follow Us</h2>
+            <h2 className="text-lg font-medium mb-4">Follow Us On</h2>
             <div className="flex space-x-4">
               <a href="#" target="_blank" rel="noopener noreferrer">
                 <FaFacebook className="h-6 w-6" />
