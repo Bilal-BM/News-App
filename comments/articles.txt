@@ -1,0 +1,272 @@
+// import { useState, useEffect } from "react";
+// import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import { db } from "@/config/firebase";
+
+// type FormData = {
+//   title: string;
+//   description: string;
+//   url: string;
+//   image: any;
+//   documentId: string;
+// };
+
+// const ArticleForm = () => {
+//   const [formData, setFormData] = useState<FormData>({
+//     title: "",
+//     description: "",
+//     url: "",
+//     image: null,
+//     documentId: "",
+//   });
+
+//   const [documents, setDocuments] = useState([]);
+
+//   useEffect(() => {
+//     // Fetch the available documents from Firestore
+//     const fetchDocuments = async () => {
+//       const querySnapshot = await getDocs(collection(db, "articles"));
+//       const documentsData = querySnapshot.docs.map((doc) => {
+//         return { id: doc.id, ...doc.data() };
+//       });
+//       setDocuments(documentsData);
+//     };
+//     fetchDocuments();
+//   }, []);
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.name]: e.target.value,
+//     });
+//   };
+
+//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.name]: e.target.files,
+//     });
+//   };
+
+//   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     setFormData({
+//       ...formData,
+//       documentId: e.target.value,
+//     });
+//   };
+
+//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+
+//     const { title, description, url, image, documentId } = formData;
+
+//     // Upload the image to Firebase Storage
+//     const storageRef = ref(getStorage(), `images/${image[0].name}`);
+//     const imageSnapshot = await uploadBytes(storageRef, image[0]);
+//     const imageUrl = await getDownloadURL(imageSnapshot.ref);
+
+//     // Save the article data to Firestore
+//     await setDoc(doc(db, "articles", documentId), {
+//       title,
+//       description,
+//       url,
+//       imageUrl,
+//       createdAt: new Date(),
+//     }, { merge: true });
+
+//     // Clear the form
+//     setFormData({
+//       title: "",
+//       description: "",
+//       url: "",
+//       image: null,
+//       documentId: "",
+//     });
+//   };
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <label htmlFor="documentId">Select a document</label>
+//       <select id="documentId" name="documentId" value={formData.documentId} onChange={handleSelectChange}>
+//         <option value="">-- Select a document --</option>
+//         {documents.map((doc:any) => (
+//           <option key={doc.id} value={doc.id}>
+//             {doc.title}
+//           </option>
+//         ))}
+//       </select>
+
+//       <label htmlFor="title">Title</label>
+//       <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} />
+
+//       <label htmlFor="description">Description</label>
+//       <textarea id="description" name="description" value={formData.description} onChange={handleChange} />
+
+//       <label htmlFor="url">URL</label>
+//       <input type="text" id="url" name="url" value={formData.url} onChange={handleChange} />
+
+//       <label htmlFor="image">Image</label>
+//       <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} />
+//       <button type="submit">Submit</button>
+// </form>
+// );
+// };
+
+// export default ArticleForm;
+
+// import { useEffect, useState } from 'react';
+// import { getFirestore, collection, doc, addDoc, getDocs } from 'firebase/firestore';
+// import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import { firebaseConfig } from '@/config/firebase';
+// import { initializeApp } from 'firebase/app';
+// import { useRouter } from 'next/router';
+
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+// const storage = getStorage(app);
+
+// type ArticleData = {
+//   title: string;
+//   description: string;
+//   url: string;
+//   image: File;
+// };
+
+// type FormData = {
+//   article: ArticleData;
+//   collectionId: string;
+// };
+
+// const AddArticleForm = () => {
+//   const [formData, setFormData] = useState<FormData>({
+//     article: {
+//       title: '',
+//       description: '',
+//       url: '',
+//       image: null,
+//     },
+//     collectionId: '',
+//   });
+//   const [uploadingImage, setUploadingImage] = useState(false);
+//   const router = useRouter();
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//       ...formData,
+//       article: {
+//         ...formData.article,
+//         [e.target.name]: e.target.value,
+//       },
+//     });
+//   };
+
+//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//       ...formData,
+//       article: {
+//         ...formData.article,
+//         image: e.target.files[0],
+//       },
+//     });
+//   };
+
+//   const handleCollectionSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     setFormData({
+//       ...formData,
+//       collectionId: e.target.value,
+//     });
+//   };
+
+//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+  
+//     if (!formData.collectionId) {
+//       console.log('Please select a collection');
+//       return;
+//     }
+  
+//     try {
+//       // Upload the image to Firebase Storage
+//       const storageRef = ref(storage, `images/${formData.article.image.name}`);
+//       setUploadingImage(true);
+//       await uploadBytes(storageRef, formData.article.image);
+//       const downloadUrl = await getDownloadURL(storageRef);
+  
+//       // Save the article details to Firestore
+//       const articlesCollectionRef = collection(db, `collections/${formData.collectionId}/articles`);
+//       const newArticleRef = doc(articlesCollectionRef);
+//       await addDoc(newArticleRef, {
+//         title: formData.article.title,
+//         description: formData.article.description,
+//         url: formData.article.url,
+//         imageUrl: downloadUrl,
+//         createdAt: new Date(),
+//       });
+  
+//       setFormData({
+//         article: {
+//           title: '',
+//           description: '',
+//           url: '',
+//           image: null,
+//         },
+//         collectionId: '',
+//       });
+//       setUploadingImage(false);
+//     } catch (error) {
+//       console.log(error);
+//       setUploadingImage(false);
+//     }
+//   };
+//   // Fetch collections data from Firestore
+//   const [collections, setCollections] = useState([]);
+//   const fetchCollections = async () => {
+//     try {
+//       const collectionsCollectionRef = collection(db, 'collections');
+//       const querySnapshot = await getDocs(collectionsCollectionRef);
+//       const fetchedCollections = querySnapshot.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       setCollections(fetchedCollections);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchCollections();
+//   }, []);
+
+//   return (
+//     <form onSubmit={handleSubmit}>
+//       <label htmlFor="collectionId">Select a collection</label>
+//       <select id="collectionId" name="collectionId" onChange={handleCollectionSelectChange} value={formData.collectionId}>
+//         <option value="">-- Select a collection --</option>
+// {collections.map((collection) => (
+// <option key={collection.id} value={collection.id}>
+// {collection.name}
+// </option>
+// ))}
+// </select>
+// <label htmlFor="title">Title</label>
+//   <input type="text" id="title" name="title" value={formData.article.title} onChange={handleChange} />
+
+//   <label htmlFor="description">Description</label>
+//   <input type="text" id="description" name="description" value={formData.article.description} onChange={handleChange} />
+
+//   <label htmlFor="url">URL</label>
+//   <input type="text" id="url" name="url" value={formData.article.url} onChange={handleChange} />
+
+//   <label htmlFor="image">Image</label>
+//   <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} />
+
+//   <button type="submit" disabled={uploadingImage}>
+//     {uploadingImage ? 'Uploading...' : 'Submit'}
+//   </button>
+// </form>
+// );
+// };
+
+// export default AddArticleForm;
+

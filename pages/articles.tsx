@@ -7,11 +7,11 @@ import Head from "next/head";
 import { FaUserAlt } from "react-icons/fa";
 import { BiTime } from "react-icons/bi";
 import Navbar from "@/components/navbar";
+import withAuth from '../utils/withAuth';
 import Searchtab from "@/components/searchtab";
 import { db } from "@/config/firebase";
 import { NextPage } from "next";
 import Loader from "@/components/loader";
-import withAuth from "@/utils/withAuth";
 
 // import { getFirestore } from 'firebase/firestore';
 
@@ -76,8 +76,8 @@ const ArticlesList: React.FC<{ articles: Article[] }> = ({ articles }) => {
   );
 };
 
-const Business: NextPage = () => {
-  const articlesRef = collection(db, "business");
+const ArticlePage: NextPage = () => {
+  const articlesRef = collection(db, "articles");
   const queryRef = query(articlesRef);
 
   const [articles, loading, error] = useCollectionData<Article>(queryRef, {
@@ -94,7 +94,7 @@ const Business: NextPage = () => {
         <Navbar />
 
         <Head>
-          <title>Business News | BM News</title>
+          <title>Articles | BM News</title>
           <meta
             name="description"
             content="Stay up-to-date with the latest sports news from Your Company Name"
@@ -105,7 +105,7 @@ const Business: NextPage = () => {
           <Searchtab />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-          <h1 className="text-3xl font-bold text-gray-900">Business News</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Articles</h1>
 
           {loading ? (
             <div>
@@ -116,9 +116,9 @@ const Business: NextPage = () => {
           )}
         </div>
       </div>
-      
+    
     </>
   );
 };
 
-export default  withAuth(Business);
+export default withAuth(ArticlePage);

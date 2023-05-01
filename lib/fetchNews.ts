@@ -46,3 +46,6 @@ const fetchNews = async () => {
   return news;
 }
 export default fetchNews;
+
+
+// "https://apiv2.allsportsapi.com/basketball/?met=Countries&APIkey=28eb21c1aa418ecaf8c30e09ef44da1f779794b559eb83749c828abd15900aca"

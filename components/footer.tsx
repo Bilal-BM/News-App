@@ -12,7 +12,7 @@ import Image from 'next/image';
 const Footer = () => {
   return (
     <footer className="bg-slate-800 text-white ">
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto  py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 ">
           
           {/* About us */}
@@ -20,7 +20,7 @@ const Footer = () => {
             <h2 className="text-lg font-medium mb-4">About Us</h2>
             <ul className="space-y-2">
               <li>
-                <Link legacyBehavior href="#">
+                <Link legacyBehavior href="#" >
                   <a className="text-gray-300 hover:text-white">
                     Our Story
                   </a>
@@ -47,8 +47,8 @@ const Footer = () => {
           
 
           {/* Logo */}
-          {/* <div  className=""> */}
-            <Link legacyBehavior href="/">
+          <div>
+            <Link legacyBehavior href="/" >
               
                 <Image
                   className="h-20 w-32  "
@@ -59,11 +59,11 @@ const Footer = () => {
                   
                 />
             </Link>
-          {/* </div> */}
+          </div>
 
 {/* Follow us */}
-<div>
-            <h2 className="text-lg font-medium mb-4">Follow Us On</h2>
+<div >
+            <h2 className="text-lg font-medium mb-4">Follow Us</h2>
             <div className="flex space-x-4">
               <a href="#" target="_blank" rel="noopener noreferrer">
                 <FaFacebook className="h-6 w-6" />

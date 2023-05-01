@@ -1,95 +1,124 @@
-import { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
-import { format } from 'date-fns';
-import { FaUserAlt } from 'react-icons/fa';
-import { BiTimeFive } from 'react-icons/bi';
-import Footer from '@/components/footer';
-import Navbar from '@/components/navbar';
-import Searchtab from '@/components/searchtab';
+import { collection, query, Timestamp } from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { format } from "date-fns";
+import Image from "next/image";
+import Link from "next/link";
+import Head from "next/head";
+import { FaUserAlt } from "react-icons/fa";
+import { BiTime } from "react-icons/bi";
+import Navbar from "@/components/navbar";
+import Searchtab from "@/components/searchtab";
+import { db } from "@/config/firebase";
+import { NextPage } from "next";
+import Loader from "@/components/loader";
+import withAuth from '../utils/withAuth';
+// import { getFirestore } from 'firebase/firestore';
 
 interface Article {
+  id: string;
   title: string;
-  image: string;
+  imageUrl: string;
   description: string;
-  author: string;
+  userName: string;
   date: Date;
+  createdAt: Timestamp;
 }
 
-const articles: Article[] = [
-  {
-    title: 'LeBron James scores 30 points in Lakers win',
-    image: 'https://picsum.photos/id/10/800/600',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ullamcorper massa nisi, eu sagittis tellus pulvinar sit amet. Vivamus in ex a magna feugiat bibendum.',
-    author: 'John Doe',
-    date: new Date(2022, 2, 16),
-  },
-  {
-    title: 'Ronaldo leads Manchester United to victory over Chelsea',
-    image: 'https://picsum.photos/id/20/800/600',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ullamcorper massa nisi, eu sagittis tellus pulvinar sit amet. Vivamus in ex a magna feugiat bibendum.',
-    author: 'Jane Smith',
-    date: new Date(2022, 1, 28),
-  },
-  {
-    title: 'Serena Williams wins Australian Open title',
-    image: 'https://picsum.photos/id/30/800/600',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ullamcorper massa nisi, eu sagittis tellus pulvinar sit amet. Vivamus in ex a magna feugiat bibendum.',
-    author: 'David Lee',
-    date: new Date(2022, 1, 10),
-  },
-];
-
-const SportsNewsPage: NextPage = () => {
+const ArticlesList: React.FC<{ articles: Article[] }> = ({ articles }) => {
   return (
-    <div className="bg-gray-100">
-        <Navbar/>
-          
-      <Head>
-        <title>Sports News | Your Company Name</title>
-        <meta name="description" content="Stay up-to-date with the latest sports news from Your Company Name" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className=" px-4 pt-5 grid justify-items-center md:justify-items-end">
-      <Searchtab/>
-      </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900">Sports News</h1>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-          {articles.map((article) => (
-            <div key={article.title} className="bg-white overflow-hidden shadow rounded-lg">
-              <Link legacyBehavior href="/">
-                <a>
-                  <div className="relative h-48">
-                    {/* <Image className="object-cover" src={article.image} layout="fill" /> */}
-                  </div>
+    <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 gap-6  py-8">
+      {articles.map((article) => {
+        const userName = article.userName
+          ?.substring(0, 5)
+          .replace(/^\w/, (c) => c.toUpperCase());
+        return (
+          <div
+            key={article.title}
+            className="bg-white rounded-lg overflow-hidden shadow-lg "
+          >
+            <Image
+              src={article.imageUrl}
+              alt="News image 1"
+              width={640}
+              height={427}
+              layout="responsive"
+            />
+            <div className="p-4">
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                {article.title}
+              </h2>
+              <p className="text-gray-600 mb-4 line-clamp-4">
+                {article.description}
+              </p>
+              <Link legacyBehavior href="/signin">
+                <a className="inline-block bg-blue-900  font-bold text-gray-100 pt-1 rounded-lg py-2 px-4 hover:bg-slate-800 focus:outline-none focus:shadow-shadow-md">
+                  Read More
                 </a>
               </Link>
-              <div className="px-4 py-5 sm:p-6">
-                <Link legacyBehavior href="/">
-                  <a className="text-xl font-medium text-gray-900 hover:text-gray-600">{article.title}</a>
-                </Link>
-                <p className="mt-1 text-gray-500">{article.description}</p>
-<div className="mt-4 flex items-center">
-<FaUserAlt className="w-4 h-4 mr-2 text-gray-400" />
-<p className="text-gray-500">{article.author}</p>
-<span className="mx-2 text-gray-400">·</span>
-<BiTimeFive className="w-4 h-4 mr-2 text-gray-400" />
-<p className="text-gray-500">{format(article.date, 'MMMM dd, yyyy')}</p>
-</div>
-</div>
-</div>
-))}
-</div>
-</div>
-<Footer />
-</div>
-);
+              <div className="mt-4 flex items-center">
+                <FaUserAlt className="w-4 h-4 mr-2 text-gray-400" />
+                <p className="text-gray-500">{userName}</p>
+
+                <BiTime className="w-4 h-4 ml-4 mr-2 text-gray-400" />
+                <p className="text-gray-500">
+                  {format(
+                    new Date(article.createdAt.toMillis()),
+                    "MMMM dd, yyyy"
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
-export default SportsNewsPage;
+const SportsNewsPage: NextPage = () => {
+  const articlesRef = collection(db, "sports");
+  const queryRef = query(articlesRef);
+
+  const [articles, loading, error] = useCollectionData<Article>(queryRef, {
+    idField: "id",
+  });
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  return (
+ 
+    <>
+      <div className="bg-gray-100 ">
+        <Navbar />
+
+        <Head>
+          <title>Sports News | Your Company Name</title>
+          <meta
+            name="description"
+            content="Stay up-to-date with the latest sports news from Your Company Name"
+          />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="px-4 pt-5 grid justify-items-center md:justify-items-end">
+          <Searchtab />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+          <h1 className="text-3xl font-bold text-gray-900">Sports News</h1>
+
+          {loading ? (
+            <div>
+              <Loader />
+            </div>
+          ) : (
+            <ArticlesList articles={articles} />
+          )}
+        </div>
+      </div>
+    </>
+ 
+  );
+};
+
+export default withAuth(SportsNewsPage);

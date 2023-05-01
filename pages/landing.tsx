@@ -1,136 +1,68 @@
-import { useState } from "react";
-import Head from "next/head";
+import Head from 'next/head'
+import Image from 'next/image'
+import { useState } from 'react'
+import withAuth from '../utils/withAuth';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import styles from '../styles/Home.module.css'
+import Navbar from '@/components/navbar'
+import Caarousel from '@/components/Carousel'
 
-import Card from "@/components/card";
-import Navbar from "@/components/navbar";
-import Searchtab from "@/components/searchtab";
-import Footer from "@/components/footer";
-
-const index = () => {
-  // const [searchText, setSearchText] = useState("");
-
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // console.log(`Search for: ${searchText}`);
-  };
+const  Home =() => {
+ 
 
   return (
-    <>
+    <div className={styles.container}>
       <Head>
-        <title>News Portal</title>
+        <title>BM News - Breaking News and Latest Updates</title>
+        <meta name="description" content="BM News - Breaking News and Latest Updates" />
+        <link rel="icon" href="/favicon.ico" />
+        
       </Head>
-      <Navbar/>
+      <Navbar />
+
+      <header className={styles.header}>
       
-      <div className="bg-white">
+        
+      </header>
+     
+      <Caarousel/>
+      <main className={styles.main}>
       
-        <main className="px-4 md:px-8">
-        <div className="px-4 pt-5 grid justify-items-center md:justify-items-end">
-      <Searchtab/>
+        <h1 className={styles.title}>Welcome to BM News</h1>
+        <p className={styles.description}>We bring you the latest news and updates from around the world.</p>
+
+        <div className={styles.grid}>
+        
+          <div className={styles.card}>
+            <h3>Breaking News &rarr;</h3>
+            <p>Stay up-to-date with the latest breaking news from around the world.</p>
+<a href="#" className={styles.cardLink}>Read More</a>
+</div>
+<div className={styles.card}>
+        <h3>Sports News &rarr;</h3>
+        <p>Get the latest sports news from your favorite teams and athletes.</p>
+        <a href="#" className={styles.cardLink}>Read More</a>
       </div>
-          <section className="mb-12">
-            <h1 className="text-3xl font-bold mb-8 ">Latest News</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1018/400/400"
-              />
-              <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1015/400/400"
-              />
-              <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1016/400/400"
-              />
-            
-            </div>
-            
-          </section>
-          <section className="mb-12">
-            <h2 className="text-4xl font-bold mb-8">Top Stories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1019/400/400"
-              />
-              <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis,sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1020/400/400"
-                />
-                </div>
-                </section>
-                <section className="mb-12">
-                <h2 className="text-4xl font-bold mb-8">Sports</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card
-                             title="Lorem ipsum dolor sit amet"
-                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                             imageSrc="https://picsum.photos/id/1021/400/400"
-                           />
-                <Card
-                             title="Lorem ipsum dolor sit amet"
-                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                             imageSrc="https://picsum.photos/id/1022/400/400"
-                           />
-            
-                </div>
-                </section>
-                <section className="mb-12">
-                <h2 className="text-4xl font-bold mb-8">Entertainment</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card
-                             title="Lorem ipsum dolor sit amet"
-                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                             imageSrc="https://picsum.photos/id/1023/400/400"
-                           />
-                <Card
-                             title="Lorem ipsum dolor sit amet"
-                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                             imageSrc="https://picsum.photos/id/1024/400/400"
-                           />
-                </div>
-                </section>
-                <section className="mb-12">
-                <h2 className="text-4xl font-bold mb-8">Technology</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card
-                             title="Lorem ipsum dolor sit amet"
-                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                             imageSrc="https://picsum.photos/id/1025/400/400"
-                           />
-                <Card
-                             title="Lorem ipsum dolor sit amet"
-                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                             imageSrc="https://picsum.photos/id/1026/400/400"
-                           />
-                </div>
-                </section>
-                <section className="mb-12">
-                <h2 className="text-4xl font-bold mb-8">Politics</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolorsit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1027/400/400"
-                />
-                <Card
-                title="Lorem ipsum dolor sit amet"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin feugiat lacus vel massa consequat, quis ornare justo pulvinar. Duis semper ex turpis, sed maximus sapien rutrum ac."
-                imageSrc="https://picsum.photos/id/1028/400/400"
-                />
-                
-                </div>
-                </section>
-                
-                </main>
-                </div>
-                <Footer/>
-                </>
-                );
-                }
-                export default index;
+
+      <div className={styles.card}>
+        <h3>Entertainment News &rarr;</h3>
+        <p>Stay updated on your favorite movies, TV shows, and celebrities.</p>
+        <a href="#" className={styles.cardLink}>Read More</a>
+      </div>
+
+      <div className={styles.card}>
+        <h3>Technology News &rarr;</h3>
+        <p>Discover the latest tech news, gadgets, and innovations.</p>
+        <a href="#" className={styles.cardLink}>Read More</a>
+      </div>
+    </div>
+    
+  </main>
+
+
+    
+  
+</div>
+)
+}
+ export default withAuth(Home)

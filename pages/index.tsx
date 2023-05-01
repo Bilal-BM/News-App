@@ -3,27 +3,30 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+
 
 const LandingPage = () => {
-  return (
+ 
+ return (
     <>
-    <Navbar />
+
+
+    <Navbar  />
       <Head>
         <title>BM News </title>
         <meta name="description" content="Get the latest news from around the world." />
       </Head>
 
-      <div className="flex flex-col items-center justify-center min-h-screen py-8">
+      <div className="  flex flex-col items-center justify-center min-h-screen py-8">
         <div className="flex flex-col items-center justify-center w-full px-4">
-          <h1 className="text-4xl font-bold text-center text-gray-900 sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl font-bold text-center text-slate-900 sm:text-5xl md:text-6xl">
             BM News
           </h1>
           <p className="mt-3 mb-10 text-lg text-center text-gray-600 sm:text-xl md:text-2xl">
             Get the latest news from around the world
           </p>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-1  ">
             
               <div className="bg-white rounded-lg overflow-hidden shadow-lg">
                 <Image
@@ -37,13 +40,13 @@ const LandingPage = () => {
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     Buisiness
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 mb-4">
                   Stay up-to-date with the latest business news from around the world.
                 Get insights into the financial markets, corporate world, and economy with our comprehensive coverage of business news.
                   </p>
                   <Link legacyBehavior href="/signin">
-                    <a className="text-blue-500 inline-flex items-center mt-4">
-                      Read More
+                    <a  className="inline-block bg-blue-900  font-bold text-gray-100 pt-1 rounded-lg py-2 px-4 hover:bg-slate-800 focus:outline-none focus:shadow-shadow-md">
+                                            Read More
                     </a>
                   </Link>
                 </div>
@@ -63,12 +66,12 @@ const LandingPage = () => {
                   <h2 className="text-lg font-medium text-gray-900 mb-2">
                     Sports
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 mb-4">
                   Get the latest updates and highlights from the world of sports with our comprehensive coverage of sports news.
                    From football to basketball, cricket to tennis, stay informed and up-to-date.
                   </p>
                   <Link legacyBehavior href="/signin">
-                    <a className="text-blue-500 inline-flex items-center mt-4">
+                  <a  className="inline-block bg-blue-900  font-bold text-gray-100 pt-1 rounded-lg py-2 px-4 hover:bg-slate-800 focus:outline-none focus:shadow-shadow-md">
                       Read More
                     </a>
                   </Link>
@@ -89,12 +92,12 @@ const LandingPage = () => {
 <h2 className="text-lg font-medium text-gray-900 mb-2">
 Health 
 </h2>
-<p className="text-gray-600">
+<p className="text-gray-600 mb-4">
 Stay informed on the latest health news from around the world with our health news section.
  Get updates on medical breakthroughs, health policies, disease outbreaks, and more.
 </p>
-<Link legacyBehavior href="/news/789">
-<a className="text-blue-500 inline-flex items-center mt-4">
+<Link legacyBehavior href="/signin">
+<a  className="inline-block bg-blue-900  font-bold text-gray-100 pt-1 rounded-lg py-2 px-4 hover:bg-slate-800 focus:outline-none focus:shadow-shadow-md">
 Read More
 </a>
 </Link>
@@ -115,24 +118,24 @@ Read More
 <h2 className="text-lg font-medium text-gray-900 mb-2">
 World 
 </h2>
-<p className="text-gray-600">
+<p className="text-gray-600 mb-4">
 Stay up-to-date with the latest breaking news from around the world, covering politics, current events, and global affairs with our comprehensive world news coverage.
 </p>
 <Link legacyBehavior href="/signin">
-<a className="text-blue-500 inline-flex items-center mt-4">
+<a  className=" inline-block bg-blue-900  font-bold text-gray-100 pt-1 rounded-lg py-2 px-4 hover:bg-slate-800 focus:outline-none focus:shadow-shadow-md"
+
+>
 Read More
 </a>
 </Link>
 </div>
 </div>
-
-
-
 </div>
 </div>
 </div>
-<Footer />
+
 </>
+
 );
 };
 

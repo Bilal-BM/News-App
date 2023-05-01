@@ -1,7 +1,41 @@
+// {
+//   "compilerOptions": {
+//     "target": "es5",
+//     "lib": ["dom", "dom.iterable", "esnext"],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "noEmit": true,
+//     "esModuleInterop": true,
+//     "module": "esnext",
+//     "moduleResolution": "node",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "preserve",
+//     "incremental": true,
+//     "paths": {
+//       "@/*": ["./*"]
+//     }
+//   },
+//   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/landing", "pages/landing"],
+//   "exclude": ["node_modules"]
+// }
+
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    // "target": "es5",
+    "target": "esnext",
+
+    // "lib": ["es2022"],
+    "lib": ["dom", "dom.iterable", "esnext","es2022"],
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "baseUrl": ".",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,6 +48,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    // "topLevelAwait": true, // Add this line to enable top-level-await
     "paths": {
       "@/*": ["./*"]
     }

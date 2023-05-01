@@ -1,130 +1,123 @@
-import { useState } from "react";
-import Head from "next/head";
+import { collection, query, Timestamp } from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { format } from "date-fns";
+import Image from "next/image";
 import Link from "next/link";
-import Footer from "@/components/footer";
+import Head from "next/head";
+import { FaUserAlt } from "react-icons/fa";
+import { BiTime } from "react-icons/bi";
 import Navbar from "@/components/navbar";
 import Searchtab from "@/components/searchtab";
+import { db } from "@/config/firebase";
+import { NextPage } from "next";
+import Loader from "@/components/loader";
+import withAuth from '../utils/withAuth';
+// import { getFirestore } from 'firebase/firestore';
 
-type NewsArticle = {
-  id: number;
+interface Article {
+  id: string;
   title: string;
-  description: string;
   imageUrl: string;
-  date: string;
-  author: string;
-  category: string;
+  description: string;
+  userName: string;
+  date: Date;
+  createdAt: Timestamp;
+}
+
+const ArticlesList: React.FC<{ articles: Article[] }> = ({ articles }) => {
+  return (
+    <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 gap-6  py-8">
+      {articles.map((article) => {
+        const userName = article.userName
+          ?.substring(0, 5)
+          .replace(/^\w/, (c) => c.toUpperCase());
+        return (
+          <div
+            key={article.title}
+            className="bg-white rounded-lg overflow-hidden shadow-lg "
+          >
+            <Image
+              src={article.imageUrl}
+              alt="News image 1"
+              width={640}
+              height={427}
+              layout="responsive"
+            />
+            <div className="p-4">
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                {article.title}
+              </h2>
+              <p className="text-gray-600 mb-4 line-clamp-4">
+                {article.description}
+              </p>
+              <Link legacyBehavior href="/signin">
+                <a className="inline-block bg-blue-900  font-bold text-gray-100 pt-1 rounded-lg py-2 px-4 hover:bg-slate-800 focus:outline-none focus:shadow-shadow-md">
+                  Read More
+                </a>
+              </Link>
+              <div className="mt-4 flex items-center">
+                <FaUserAlt className="w-4 h-4 mr-2 text-gray-400" />
+                <p className="text-gray-500">{userName}</p>
+
+                <BiTime className="w-4 h-4 ml-4 mr-2 text-gray-400" />
+                <p className="text-gray-500">
+                  {format(
+                    new Date(article.createdAt.toMillis()),
+                    "MMMM dd, yyyy"
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
-const NEWS_ARTICLES: NewsArticle[] = [
-  {
-    id: 1,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageUrl: "https://picsum.photos/seed/picsum/800/600",
-    date: "March 23, 2023",
-    author: "John Doe",
-    category: "World",
-  },
-  {
-    id: 2,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageUrl: "https://picsum.photos/id/20/800/600",
-    date: "March 22, 2023",
-    author: "Jane Smith",
-    category: "World",
-  },
-  {
-    id: 3,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageUrl: "https://picsum.photos/id/60/800/600",
-    date: "March 21, 2023",
-    author: "John Doe",
-    category: "World",
-  },
-  {
-    id: 4,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageUrl: "https://picsum.photos/id/401/800/600",
-    date: "March 20, 2023",
-    author: "Jane Smith",
-    category: "World",
-  },
-  {
-    id: 5,
-    title: "Lorem Ipsum",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    imageUrl: "/news-image5.jpg",
-    date: "March 19, 2023",
-    author: "John Doe",
-    category: "World",
-  },
-];
+const SportsNewsPage: NextPage = () => {
+  const articlesRef = collection(db, "world");
+  const queryRef = query(articlesRef);
 
-const WorldNewsPage: React.FC = () => {
-  const [articles, setArticles] = useState<NewsArticle[]>(NEWS_ARTICLES);
+  const [articles, loading, error] = useCollectionData<Article>(queryRef, {
+    idField: "id",
+  });
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <>
-    <Navbar />
-    
-      <Head>
-        <title>BM News | World News</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className="px-4 pt-5 grid justify-items-center md:justify-items-end bg-gray-100">
-      <Searchtab/>
+      <div className="bg-gray-100 ">
+        <Navbar />
+
+        <Head>
+          <title>Latest News | BM News</title>
+          <meta
+            name="description"
+            content="Stay up-to-date with the latest sports news from Your Company Name"
+          />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="px-4 pt-5 grid justify-items-center md:justify-items-end">
+          <Searchtab />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+          <h1 className="text-3xl font-bold text-gray-900">Latest News</h1>
+
+          {loading ? (
+            <div>
+              <Loader />
+            </div>
+          ) : (
+            <ArticlesList articles={articles} />
+          )}
+        </div>
       </div>
+     
+    </>
+  );
+};
 
-      <div className="bg-gray-100 min-h-screen flex flex-col  items-start ">  
-        <h1 className="text-3xl font-bold text-gray-800  mb-4 ml-8">World News</h1>
-        <p className="text-lg text-gray-600 mb-8 ml-8">
-          Get the latest world news from BM News.
-        </p>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {articles.map((article) => (
-            <div
-              key={article.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300"
-            >
-              <Link legacyBehavior href={`/article/${article.id}`}>
-                <a>
-                  <img
-                    className="h-48 w-full object-cover"
-                    src={article.imageUrl}
-                    alt={article.title}
-                    />
-                    <div className="p-4">
-                    <div className="flex items-baseline">
-                    <span className="bg-blue-200 text-blue-800 text-xs rounded-full px-2 py-1 uppercase font-semibold tracking-wide">
-                    {article.category}
-                    </span>
-                    <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
-                    {article.author} | {article.date}
-                    </div>
-                    </div>
-                    <h2 className="mt-2 mb-2 text-xl font-semibold text-gray-800">
-                    {article.title}
-                    </h2>
-                    <p className="text-gray-700 text-base">{article.description}</p>
-                    </div>
-                    </a>
-                    </Link>
-                    </div>
-                    ))}
-                    </div>
-                    </div>
-                    <Footer />
-                    </>
-                    );
-                    };
-                    
-                    export default WorldNewsPage;
+export default withAuth(SportsNewsPage);

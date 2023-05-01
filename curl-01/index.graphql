@@ -1,0 +1,13 @@
+type ResultEntry {
+  country_key: Int
+  country_name: String
+}
+type Root {
+  result: [ResultEntry]
+  success: Int
+}
+
+type Query {
+  myQuery(APIkey: String, met: String): Root
+    @rest(endpoint: "https://apiv2.allsportsapi.com/basketball/")
+}
