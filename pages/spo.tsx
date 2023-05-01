@@ -1,11 +1,9 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { FaUserAlt } from 'react-icons/fa';
 import { BiTimeFive } from 'react-icons/bi';
-import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import Searchtab from '@/components/searchtab';
 

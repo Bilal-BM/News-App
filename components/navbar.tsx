@@ -1,7 +1,7 @@
 
 import {  useState } from "react";
 import Link from "next/link";
-import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
+// import { MoonIcon, SunIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { initializeApp } from "firebase/app";
@@ -115,19 +115,19 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ showLinks = true }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const router = useRouter();
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (isDarkMode) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
-  };
+  // const toggleDarkMode = () => {
+  //   setIsDarkMode(!isDarkMode);
+  //   if (isDarkMode) {
+  //     document.documentElement.classList.remove("dark");
+  //   } else {
+  //     document.documentElement.classList.add("dark");
+  //   }
+  // };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

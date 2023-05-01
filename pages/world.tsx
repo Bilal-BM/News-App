@@ -1,5 +1,5 @@
-import { collection, query, Timestamp } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { Timestamp, collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,12 +7,10 @@ import Head from "next/head";
 import { FaUserAlt } from "react-icons/fa";
 import { BiTime } from "react-icons/bi";
 import Navbar from "@/components/navbar";
+import withAuth from '@/utils/withAuth';
 import Searchtab from "@/components/searchtab";
 import { db } from "@/config/firebase";
-import { NextPage } from "next";
 import Loader from "@/components/loader";
-import withAuth from '../utils/withAuth';
-// import { getFirestore } from 'firebase/firestore';
 
 interface Article {
   id: string;
@@ -24,9 +22,13 @@ interface Article {
   createdAt: Timestamp;
 }
 
-const ArticlesList: React.FC<{ articles: Article[] }> = ({ articles }) => {
+interface ArticlesListProps {
+  articles: Article[];
+}
+
+const ArticlesList: React.FC<ArticlesListProps> = ({ articles }) => {
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 gap-6  py-8">
+    <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 gap-6 py-8">
       {articles.map((article) => {
         const userName = article.userName
           ?.substring(0, 5)
@@ -75,49 +77,51 @@ const ArticlesList: React.FC<{ articles: Article[] }> = ({ articles }) => {
   );
 };
 
-const SportsNewsPage: NextPage = () => {
-  const articlesRef = collection(db, "world");
-  const queryRef = query(articlesRef);
+const ArticlePage: React.FC = () => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [articles, loading, error] = useCollectionData<Article>(queryRef, {
-    idField: "id",
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "world"));
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Article[];
+        setArticles(data);
+        setLoading(false);
+      } catch (error:any)
+      {
+        setLoading(false);
+        setError(error.message);
+        }
+        };
+        fetchData();
+}, []);
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+if (loading) {
+return <Loader />;
+}
 
-  return (
-    <>
-      <div className="bg-gray-100 ">
-        <Navbar />
+if (error) {
+return <p>{error}</p>;
+}
 
-        <Head>
-          <title>Latest News | BM News</title>
-          <meta
-            name="description"
-            content="Stay up-to-date with the latest sports news from Your Company Name"
-          />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <div className="px-4 pt-5 grid justify-items-center md:justify-items-end">
-          <Searchtab />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-          <h1 className="text-3xl font-bold text-gray-900">Latest News</h1>
-
-          {loading ? (
-            <div>
-              <Loader />
-            </div>
-          ) : (
-            <ArticlesList articles={articles} />
-          )}
-        </div>
-      </div>
-     
-    </>
-  );
+return (
+<>
+<Head>
+<title>Articles - My Blog</title>
+</Head>
+<Navbar />
+<Searchtab />
+<div className="max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+<h1 className="text-2xl font-bold text-gray-900">Articles</h1>
+<ArticlesList articles={articles} />
+</div>
+</>
+);
 };
 
-export default withAuth(SportsNewsPage);
+export default withAuth(ArticlePage);

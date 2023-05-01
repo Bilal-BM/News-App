@@ -23,7 +23,7 @@ export const getVideos = async (): Promise<Video[]> => {
 };
 
 export default async function handler(
-  req: NextApiRequest,
+  _req: NextApiRequest,
   res: NextApiResponse<Video[]>,
 ) {
   const videos = await getVideos();

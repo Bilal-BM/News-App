@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import { FiUpload } from "react-icons/fi";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/config/firebase";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { File } from "buffer";
+// import { File } from "buffer";
 import withAuth from "@/utils/withAuth";
 
 interface Props {}
@@ -16,15 +16,15 @@ interface Props {}
 const AddArticle: React.FC<Props> = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  // const [image, setImageUrl] = useState<File | null>(null);
   const [imageName, setImageName] = useState("");
   const [collectionName, setCollectionName] = useState("");
   const [user] = useAuthState(auth);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setImage(file);
+      const file:any = e.target.files[0];
+      // setImageUrl(file);
       setImageName(file.name);
     }
   };
@@ -34,11 +34,11 @@ const AddArticle: React.FC<Props> = () => {
 
     try {
       // Upload image to Firebase Storage
-      let imageUrl = "";
-      if (image) {
+      let imageUrl:any = "";
+      if (imageUrl) {
         const storageRef = ref(storage, `images/${uuidv4()}`);
         const reader = new FileReader();
-        reader.readAsDataURL(image);
+        reader.readAsDataURL(imageUrl);
         reader.onload = async () => {
           const dataURL = reader.result as string;
           if (dataURL) {
@@ -62,7 +62,7 @@ const AddArticle: React.FC<Props> = () => {
             // Clear form
             setTitle("");
             setDescription("");
-            setImage(null);
+            // setImage(null);
             setImageName("");
             setCollectionName("");
 

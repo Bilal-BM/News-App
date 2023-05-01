@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import withAuth from '../utils/withAuth';
 
 import LoadButton from "@/components/loadButoon";
-import { PhotoIcon } from "@heroicons/react/20/solid";
 import Navbar from "@/components/navbar";
 
 interface Props {}
@@ -24,7 +23,7 @@ const AddArticle: React.FC<Props> = () => {
   const [collectionName, setCollectionName] = useState("");
   const [user] = useAuthState(auth);
   const [uploading, setUploading] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
